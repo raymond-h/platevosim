@@ -7,7 +7,9 @@ Player = require './player'
 
 module.exports = class MainState extends Phaser.State
 	preload: ->
-		@game.load.spritesheet 'player', 'res/player.png', 16, 16
+		@game.load.image 'mario-tileset', 'res/mario-tileset.png'
+
+		@game.load.spritesheet 'player', 'res/mario.png', 16, 16
 
 		@game.load.tilemap 'mainmap', 'res/main.json', null, Phaser.Tilemap.TILED_JSON
 
@@ -37,3 +39,6 @@ module.exports = class MainState extends Phaser.State
 
 		@map = new Map @game, @, newMap
 		@stage.backgroundColor = @map.backgroundColor
+
+	update: ->
+		@game.physics.arcade.collide @player, @map.layers.main
