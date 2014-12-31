@@ -2,6 +2,8 @@ _ = require 'lodash'
 
 Map = require './map'
 Player = require './player'
+Orders = require './orders'
+pathFinding = require './path-finding'
 
 {fixMaps} = require './map-fixer'
 
@@ -22,10 +24,10 @@ module.exports = class MainState extends Phaser.State
 
 		@changeMap 'mainmap'
 
-		{x, y} = @map.entryPoints.main
-		@player = @createPlayer x, y
+		@players = @game.add.group()
+		@_players = []
 
-		@game.camera.follow @player
+		@newIteration()
 
 	createPlayer: (x, y) ->
 		player = new Player @game, @, x, y
@@ -40,5 +42,52 @@ module.exports = class MainState extends Phaser.State
 		@map = new Map @game, @, newMap
 		@stage.backgroundColor = @map.backgroundColor
 
+		@distMap = pathFinding.getDistanceMap @map, [@map.finish]
+
+		console.log @distMap
+
+	newIteration: (baseOrders = []) ->
+		console.log 'Base orders', baseOrders
+
+		@closestDist = Infinity
+		{x, y} = @map.entryPoints.main
+
+		for i in [0...100]
+			player = @createPlayer x, y
+
+			player.orders = Orders.generateOrders baseOrders
+			player.oldOrders = player.orders[..]
+
+			@players.addChild player
+
 	update: ->
-		@game.physics.arcade.collide @player, @map.layers.main
+		if @players.children.length <= 0
+			@newIteration @oldOrders
+
+		@game.physics.arcade.collide @players, @map.layers.main
+
+		win = no
+
+		@players.forEachAlive (player) =>
+			if Math.round(player.body.position.x / 16) is @map.finish.x and
+					Math.round(player.body.position.y / 16) is @map.finish.y
+
+				win = yes
+
+		if win
+			@players.removeAll yes
+			@newIteration()
+
+	playerDeath: (player) ->
+		x = player.body.position.x // 16
+		y = player.body.position.y // 16
+
+		dist = @distMap[y][x]
+
+		console.log "Death at #{x},#{y}; distance: #{dist}"
+		if dist < @closestDist
+			@closestDist = dist
+			@oldOrders = player.oldOrders
+			console.log 'Updated old order', @oldOrders
+
+		player.destroy()

@@ -49,6 +49,12 @@ module.exports = class Map
 
 				@entryPoints[entryName] = {x, y}
 
+			when 'finish'
+				@finish = {
+					x: x//16
+					y: y//16
+				}
+
 	destroy: ->
 		@tilemap.destroy() if @tilemap?
 		@tilemap = null
