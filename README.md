@@ -1,16 +1,6 @@
-# platformer
-Platformer
-
-## Installing
-`npm install platformer`
-
-## Example usage
-```js
-var platformer = require('platformer');
-
-// Do whatever you want with 'platformer'!
-```
-    
+# platevosim
+Beating platforming levels by "evolving" orders to make it happen
+  
 ## License
 The MIT License (MIT)
 
