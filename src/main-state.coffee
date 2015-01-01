@@ -22,6 +22,7 @@ module.exports = class MainState extends Phaser.State
 		fixMaps @game.cache
 
 		@game.antialias = no
+		@game.stage.disableVisibilityChange = yes
 
 		@game.physics.startSystem Phaser.Physics.ARCADE
 
@@ -30,6 +31,11 @@ module.exports = class MainState extends Phaser.State
 		@changeMap @maps[0]
 
 		@players = @game.add.group()
+
+		@pauseKey = @game.input.keyboard.addKey Phaser.Keyboard.P
+
+		@pauseKey.onDown.add =>
+			@game.paused = not @game.paused
 
 		@newIteration()
 
