@@ -1,5 +1,5 @@
 exports.getDistanceMap = (map, goals) ->
-	layer = map.layers.main
+	layer = map.layers.col
 
 	tileFn = (x, y) ->
 		not map.tilemap.getTile(x, y, layer, yes).collides
