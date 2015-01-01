@@ -25,7 +25,6 @@ module.exports = class MainState extends Phaser.State
 		@changeMap 'mainmap'
 
 		@players = @game.add.group()
-		@_players = []
 
 		@newIteration()
 
