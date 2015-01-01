@@ -44,8 +44,6 @@ module.exports = class MainState extends Phaser.State
 
 		@distMap = pathFinding.getDistanceMap @map, [@map.finish]
 
-		console.log @distMap
-
 	newIteration: (baseOrders = []) ->
 		console.log 'Base orders', baseOrders
 
