@@ -15,6 +15,8 @@ module.exports = class MainState extends Phaser.State
 		@game.load.spritesheet 'player', 'res/mario.png', 16, 16
 
 		@game.load.tilemap 'mainmap', 'res/main.json', null, Phaser.Tilemap.TILED_JSON
+		@game.load.tilemap 'secondmap', 'res/second.json', null,
+			Phaser.Tilemap.TILED_JSON
 
 	create: ->
 		fixMaps @game.cache
@@ -23,7 +25,7 @@ module.exports = class MainState extends Phaser.State
 
 		@game.physics.startSystem Phaser.Physics.ARCADE
 
-		@maps = ['mainmap']
+		@maps = ['mainmap', 'secondmap']
 
 		@changeMap @maps[0]
 
@@ -60,6 +62,12 @@ module.exports = class MainState extends Phaser.State
 
 			@players.addChild player
 
+	startNextRound: ->
+		@players.removeAll yes
+		@maps.push @maps.shift() # rotate the array of maps
+		@changeMap @maps[0]
+		@newIteration()
+
 	update: ->
 		if @players.children.length <= 0
 			@newIteration @oldOrders
@@ -74,11 +82,8 @@ module.exports = class MainState extends Phaser.State
 
 				win = yes
 
-		if win
-			@players.removeAll yes
-			@maps.push @maps.shift() # rotate the array of maps
-			@changeMap @maps[0]
-			@newIteration()
+		if win or @game.input.keyboard.downDuration Phaser.Keyboard.N, 10
+			@startNextRound()
 
 	playerDeath: (player) ->
 		x = player.body.position.x // 16
