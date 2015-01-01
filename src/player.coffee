@@ -43,7 +43,7 @@ module.exports = class Player extends Phaser.Sprite
 		switch order.type
 			when 'jump'
 				if @body.blocked.down
-					@body.velocity.y = -100
+					@body.velocity.y = -137
 
 			when 'move'
 				@walkDir = order.direction
