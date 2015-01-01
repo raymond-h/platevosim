@@ -70,8 +70,11 @@ module.exports = class MainState extends Phaser.State
 
 	startNextRound: ->
 		@players.removeAll yes
+
 		@maps.push @maps.shift() # rotate the array of maps
 		@changeMap @maps[0]
+		@game.world.bringToTop @players
+
 		@newIteration()
 
 	update: ->
