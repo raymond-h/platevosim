@@ -22,7 +22,9 @@ module.exports = class MainState extends Phaser.State
 
 		@game.physics.startSystem Phaser.Physics.ARCADE
 
-		@changeMap 'mainmap'
+		@maps = ['mainmap']
+
+		@changeMap @maps[0]
 
 		@players = @game.add.group()
 
@@ -73,6 +75,8 @@ module.exports = class MainState extends Phaser.State
 
 		if win
 			@players.removeAll yes
+			@maps.push @maps.shift() # rotate the array of maps
+			@changeMap @maps[0]
 			@newIteration()
 
 	playerDeath: (player) ->
