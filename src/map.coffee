@@ -23,16 +23,16 @@ module.exports = class Map
 			color(@tilemap.properties.backgroundColor ? '#6B8AFF').hex()
 
 		@tilemap.addTilesetImage 'mario-tileset'
+		@tilemap.addTilesetImage 'metatiles'
 
 		@entryPoints = {}
 
-		@layers = Map.createLayers @tilemap, ['background', 'main']
+		@layers = Map.createLayers @tilemap, ['background', 'main', 'col']
 
 		@layers.main.resizeWorld()
+		@layers.col.renderable = no
 
-		@tilemap.setCollision [
-			[0...4]...
-		], yes, @layers.main, yes
+		@tilemap.setCollision 925, yes, 'col', yes
 
 		@loadObjects()
 

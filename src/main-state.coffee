@@ -10,6 +10,7 @@ pathFinding = require './path-finding'
 module.exports = class MainState extends Phaser.State
 	preload: ->
 		@game.load.image 'mario-tileset', 'res/mario-tileset.png'
+		@game.load.image 'metatiles', 'res/metatiles.png'
 
 		@game.load.spritesheet 'player', 'res/mario.png', 16, 16
 
@@ -63,7 +64,7 @@ module.exports = class MainState extends Phaser.State
 		if @players.children.length <= 0
 			@newIteration @oldOrders
 
-		@game.physics.arcade.collide @players, @map.layers.main
+		@game.physics.arcade.collide @players, @map.layers.col
 
 		win = no
 
